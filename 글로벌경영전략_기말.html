@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1f5f8b">
+<title>글로벌경영전략 기말</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#fff; --ink:#1c2530; --sub:#5b6776;
+    --line:#e5e9ee; --brand:#1f5f8b; --brand2:#2f80b8;
+    --kw-bg:#eaf3fb; --kw-ink:#15527d; --star:#d4860b; --hl:#fff6e6;
+    --keybg:#eef8ef; --keyline:#cfe9d2; --keyink:#1f7a3d;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Segoe UI",Roboto,sans-serif;
+    line-height:1.72; font-size:16px; -webkit-text-size-adjust:100%;}
+  header{position:sticky; top:0; z-index:20; background:var(--brand); color:#fff;
+    padding:9px 12px; box-shadow:0 2px 8px rgba(0,0,0,.12);}
+  .topbar{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+  .topbar h1{margin:0; font-size:15px; font-weight:700; flex:1;}
+  /* mode toggle */
+  .seg{display:flex; background:rgba(255,255,255,.18); border-radius:999px; padding:3px;}
+  .seg button{border:none; background:transparent; color:#fff; font-family:inherit;
+    font-size:12.5px; font-weight:700; padding:5px 11px; border-radius:999px; cursor:pointer;}
+  .seg button.on{background:#fff; color:var(--brand);}
+  .nav{display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;}
+  .nav::-webkit-scrollbar{display:none;}
+  .nav button{flex:0 0 auto; white-space:nowrap; border:none; cursor:pointer;
+    background:rgba(255,255,255,.16); color:#fff; font-size:13px; font-weight:600;
+    padding:7px 12px; border-radius:999px; font-family:inherit;}
+  .nav button.active{background:#fff; color:var(--brand);}
+  main{max-width:780px; margin:0 auto; padding:14px 12px 80px;}
+  .view{display:none;}
+  .view.active{display:block;}
+  .intro{background:var(--hl); border:1px solid #f0dca8; border-radius:14px; padding:12px 15px; margin-bottom:14px; font-size:14px;}
+  .intro b{color:#9a6206;}
+  .hint{font-size:12.5px; color:var(--sub); margin:-4px 0 12px; padding-left:4px;}
+  .wk{margin:22px 0 4px; font-size:16.5px; font-weight:800; color:#fff;
+    background:linear-gradient(90deg,var(--brand),var(--brand2)); padding:11px 15px; border-radius:11px;
+    scroll-margin-top:128px;}
+  .wk small{font-weight:600; opacity:.9; font-size:12px;}
+  .c{background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; margin:12px 0; box-shadow:0 1px 2px rgba(0,0,0,.03);}
+  .c h3{margin:0; font-size:16px; color:var(--brand); letter-spacing:-.2px;}
+  .c h3 .tag{font-size:11px; background:#fdeccd; color:#9a6206; padding:2px 7px; border-radius:6px; margin-left:6px; vertical-align:middle; font-weight:700;}
+  .c .detail{margin-top:9px;}
+  .c p{margin:8px 0;}
+  .c ul,.c ol{margin:8px 0; padding-left:20px;}
+  .c li{margin:6px 0;}
+  b,strong{color:#11324a;}
+  .kw{display:inline-block; background:var(--kw-bg); color:var(--kw-ink); border-radius:6px;
+    padding:0 6px; font-size:14px; font-weight:600;}
+  .key{background:var(--keybg); border:1px solid var(--keyline); border-radius:9px; padding:8px 11px; margin-top:10px; font-size:13.5px;}
+  .key b{color:var(--keyink);}
+  .why{border-left:3px solid var(--brand2); padding:2px 0 2px 11px; margin:9px 0; color:var(--sub); font-size:14px;}
+  .ex{background:#f3f8fc; border:1px solid #d5e6f3; border-radius:9px; padding:8px 11px; margin-top:9px; font-size:13.5px;}
+  .ex b{color:var(--brand);}
+  .tablewrap{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:10px 0 0; border:1px solid var(--line); border-radius:10px;}
+  table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:440px;}
+  th,td{border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top;}
+  th{background:#eef3f8; color:var(--brand); font-weight:700;}
+  /* keyword-only mode: hide explanatory prose */
+  body.kwmode .c .detail{display:none;}
+  body.kwmode .c{padding:11px 14px;}
+  body.kwmode .c .key{margin-top:9px;}
+  /* mock + cram */
+  .qbox{border-left:4px solid var(--brand2); background:#f3f8fc; border-radius:0 10px 10px 0; padding:10px 13px; margin:12px 0;}
+  .qbox .q{font-weight:700; margin-bottom:6px;}
+  .ans{font-size:14.5px;}
+  .need{background:var(--keybg); border:1px solid var(--keyline); border-radius:8px; padding:7px 10px; margin-top:8px; font-size:13px;}
+  .need b{color:var(--keyink);}
+  body.kwmode .qbox .ans{display:none;}
+  .cramcard{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:4px 16px 12px; margin:12px 0;}
+  .cramcard h3{font-size:14.5px; color:var(--brand); margin:14px 0 4px;}
+  .cramcard p{margin:4px 0;}
+  .totop{position:fixed; right:14px; bottom:16px; z-index:30; background:var(--brand); color:#fff;
+    border:none; width:46px; height:46px; border-radius:50%; font-size:20px;
+    box-shadow:0 3px 10px rgba(0,0,0,.25); cursor:pointer; display:none;}
+  .totop.show{display:block;}
+</style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <h1>글로벌경영전략 · 기말</h1>
+    <div class="seg" id="seg">
+      <button class="on" data-mode="full">해설</button>
+      <button data-mode="kw">키워드</button>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nav-w active" data-week="w2">WK2</button>
+    <button class="nav-w" data-week="w3">WK3</button>
+    <button class="nav-w" data-week="w4">WK4</button>
+    <button class="nav-w" data-week="w5">WK5</button>
+    <button class="nav-w" data-week="w6">WK6</button>
+    <button class="nav-w" data-week="w7">WK7</button>
+    <button class="nav-v" data-view="mock">📝 모의답안</button>
+    <button class="nav-v" data-view="cram">⏱️ 30분압축</button>
+  </div>
+</header>
+<main>
+
+<!-- ============ CONCEPTS VIEW ============ -->
+<section class="view active" id="concepts">
+  <div class="intro">
+    <b>해설</b> 모드: 개념을 풀어서 설명 / <b>키워드</b> 모드: 답안에 박을 키워드만.
+    상단 토글로 전환하세요. 시험은 키워드 채점이지만 개념을 이해해야 뉴스기사에 응용됩니다.
+  </div>
+
+  <!-- WK2 -->
+  <div class="wk" id="w2">WK2 — 세계화의 진화 / MNE가 된다는 것</div>
+
+  <div class="c"><h3>세계화의 큰 흐름 <span class="tag">전체 관통</span></h3>
+    <div class="detail">
+    <p>과거 세계화는 "국경을 낮추고 효율적인 곳에서 생산·판매하면 모두 이득"이라는 <b>국제자유주의(international liberalism)</b> 논리였습니다. 그러나 중국이 부상하고 미국과 패권을 다투면서, 이제는 <b>"누구와 거래하느냐가 안보 문제"</b>인 <b>지정학(geopolitics)</b> 시대가 됐습니다.</p>
+    <p>즉 기업 의사결정 기준이 <b>효율 → 안보·정치</b>로 이동. 자유로운 세계화 → <b>방어적 세계화</b> → <b>디커플링/디리스킹</b>.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> International liberalism → Geopolitics · Globalization → Guarded → Decoupling/De-risking</div>
+  </div>
+
+  <div class="c"><h3>CAGE 거리 <span class="tag">★ 빈출</span></h3>
+    <div class="detail">
+    <p>"세계화됐으니 거리는 의미 없다"는 통념을 반박. 두 나라 사이의 <b>거리(차이)</b>를 네 가지로 나눠 진출 시장을 분석. 멀수록 진출이 어렵고 비용이 큽니다.</p>
+    <ul>
+      <li><b>C 문화:</b> 언어·종교·가치관·관습</li>
+      <li><b>A 제도/행정:</b> 정치·법·제도, 식민지 유대, 무역협정</li>
+      <li><b>G 지리:</b> 물리적 거리·국경·기후·물류</li>
+      <li><b>E 경제:</b> 소득·구매력·인프라 격차</li>
+    </ul>
+    <div class="why">진입분석 틀 <b>3C+1C</b>의 "1C(Context)"가 바로 CAGE입니다.</div>
+    </div>
+    <div class="key"><b>💡 키워드:</b> CAGE distance (Cultural·Administrative·Geographic·Economic)</div>
+  </div>
+
+  <div class="c"><h3>LOF — 이방인 비용</h3>
+    <div class="detail">
+    <p><b>Liability of Foreignness.</b> 외국기업이라는 이유만으로 떠안는 추가 비용·불이익. 현지 규제·차별, 정보 부족, 네트워크 미편입(outsidership)이 원인.</p>
+    <div class="why">극복: 남이 못 가진 <b>firm-specific advantage</b>를 무기로, 현지 네트워크 편입, 경험 학습.</div>
+    </div>
+    <div class="key"><b>💡 키워드:</b> LOF · firm-specific advantage · VRIN</div>
+  </div>
+
+  <div class="c"><h3>국가자본주의 (방어적 세계화)</h3>
+    <div class="detail">
+    <p>경제발전 후 중국 정부는 시장을 개방만 하지 않고 <b>자국 시장·부를 보호·통제</b>하기 시작. 핵심은 경제 자체가 목적이 아니라 <b>정권 생존 극대화</b>를 위해 경제를 통제한다는 점.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Guarded globalization · State capitalism · 정권 생존 극대화</div>
+  </div>
+
+  <div class="c"><h3>지정학의 귀환 · 비시장 전략</h3>
+    <div class="detail">
+    <p>크림반도 병합(2014) 이후 기업은 시장 논리만으로 살 수 없게 됐습니다. 정치·외교 리스크가 상수. 기업도 <b>외교하듯 경영</b>해야 함.</p>
+    <ul>
+      <li><b>Non-market strategy:</b> 시장 밖(정부·규제·여론) 요인 관리</li>
+      <li><b>Corporate foreign policy:</b> 기업판 외교</li>
+      <li><b>Geopolitical due diligence:</b> 진출 전 지정학 실사</li>
+    </ul>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Geopolitics · Non-market strategy · Corporate foreign policy · Geopolitical due diligence</div>
+  </div>
+
+  <div class="c"><h3>Choke points — 경제의 무기화 <span class="tag">★ 빈출</span></h3>
+    <div class="detail">
+    <p>국가가 장악한 <b>경제 인프라</b>(결제망·반도체 장비·핵심 부품)를 <b>정치 무기</b>로 사용. 상대가 의존할수록 목줄을 쥠 = <b>weaponized interdependence</b>.</p>
+    <div class="ex"><b>사례:</b> 미국이 삼성·SK하이닉스 중국공장 <b>VEU</b>(장비 반입 사전승인 면제)를 박탈 → 매번 미국 승인 필요. 미국이 병목을 쥔 것.</div>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Choke points · Weaponized interdependence · VEU</div>
+  </div>
+
+  <div class="c"><h3>디커플링 · 디리스킹</h3>
+    <div class="detail">
+    <p><b>Decoupling:</b> 미·중 경제 분리. 너무 극단적이라 최근엔 <b>De-risking</b>(핵심 분야 대중국 의존도 낮추기)으로 표현. 결과로 <b>글로벌 공급망 → 로컬 공급망</b> 재편. 이제 경제는 <b>국가안보 경제</b> 관점.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Decoupling · De-risking · National security economy · Local supply chain</div>
+  </div>
+
+  <div class="c"><h3>Hub firms — 새 유형의 MNE</h3>
+    <div class="detail">
+    <p>구글·아마존·애플·알리바바·텐센트 같은 <b>디지털 슈퍼파워</b>. 한 분야에서 키운 <b>네트워크 자산</b>을 다른 산업으로 들고 가 경쟁구조를 <b>재설계(re-architect)</b>(제품 중심→네트워크 중심).</p>
+    <div class="why">허브 기업은 <b>value sharing</b>으로 생태계 전체를 살려야 지속됨.</div>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Hub firms(GAFA+BAT) · Network-based assets · Re-architect · Value sharing</div>
+  </div>
+
+  <div class="c"><h3>AI factory — AI 시대 경쟁</h3>
+    <div class="detail">
+    <p>새 기업의 핵심은 <b>AI 공장</b> = 의사결정 과학화 엔진. 데이터를 예측·통찰·선택으로 자동 변환. 경쟁우위 원천이 <b>원가·품질·브랜드 → 네트워크 위치·고유 데이터·분석</b>으로 전환.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> AI factory · Scale·Scope·Learning 패러다임 전환</div>
+  </div>
+
+  <div class="c"><h3>종합: "MNE가 된다는 것"</h3>
+    <div class="detail">
+    <p>외부: <span class="kw">CAGE</span> + <span class="kw">국가자본주의</span> + <span class="kw">지정학 리스크</span> + <span class="kw">choke points</span> → <b>LOF</b>. 극복: <b>firm-specific advantage·VRIN·Process-Position-Path</b>. 내부: 글로벌 지식·학습·인재 역량이 전제.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> CAGE+State capitalism+Geopolitics+Choke points → LOF / 극복: firm-specific advantage·VRIN·Process-Position-Path</div>
+  </div>
+
+  <!-- WK3 -->
+  <div class="wk" id="w3">WK3 — MNE 이론 (왜 다국적기업이 존재하나)</div>
+
+  <div class="c"><h3>내부화 이론</h3>
+    <div class="detail">
+    <p>왜 외부 시장에 맡기지 않고 직접 자회사를 둘까? 시장이 불완전하면(<b>market imperfection</b>) 외부 거래 비용·위험(계약·기술유출·품질통제)이 큼. 이 <b>거래비용(transaction cost)</b>이 크면 내부로 끌어들이는 게 효율적.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Market imperfection · Transaction cost(TCE) · 내부화</div>
+  </div>
+
+  <div class="c"><h3>지식기반 관점</h3>
+    <div class="detail">
+    <p>경쟁력 핵심은 지식. 문서로 옮기는 <b>형식지(explicit)</b> vs 사람·경험에 녹은 <b>암묵지(tacit)</b>. 암묵지는 시장 거래가 어려워 조직 내부에서 이전·축적하려 다국적화.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Tacit(암묵지) vs Explicit(형식지)</div>
+  </div>
+
+  <div class="c"><h3>OLI 절충이론 <span class="tag">★ 빈출</span></h3>
+    <div class="detail">
+    <p>FDI가 일어나려면 <b>세 우위</b>가 동시 충족.</p>
+    <ul>
+      <li><b>O 소유:</b> 남이 못 가진 강점(기술·브랜드·경영)</li>
+      <li><b>L 입지:</b> 그 나라에 가야 얻는 이점(시장·자원·저비용)</li>
+      <li><b>I 내부화:</b> 라이선싱보다 직접 통제가 유리한 이유</li>
+    </ul>
+    <div class="why">셋 다=FDI, I 없으면 라이선싱, L 없으면 수출.</div>
+    </div>
+    <div class="key"><b>💡 키워드:</b> OLI · Ownership · Location · Internalization</div>
+  </div>
+
+  <div class="c"><h3>네트워크 관점 · Outsidership</h3>
+    <div class="detail">
+    <p>과거엔 <b>심리적 거리(psychic distance)</b> 가까운 곳부터 진출(국내→지역→글로벌 점진 진화). 최근엔 진짜 불확실성은 거리가 아니라 <b>네트워크에 못 낀 상태(outsidership)</b> — 아는 사람이 없는 게 문제.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Psychic distance · Outsidership · Experiential learning</div>
+  </div>
+
+  <div class="c"><h3>제도적 대응 + 동적역량</h3>
+    <div class="detail">
+    <p>MNE는 제도에 능동 대응: <b>적응·우회·차익·혁신</b>. 환경 변화에 역량을 재구성하는 <b>동적역량</b> = <b>감지(sensing)·포착(seizing)·전환(transforming)</b>.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Adaptation·Circumvention·Arbitrage·Innovation · Dynamic capability(Sensing·Seizing·Transforming)</div>
+  </div>
+
+  <!-- WK4 -->
+  <div class="wk" id="w4">WK4 — 해외시장 진입 I (진입 + 제휴)</div>
+
+  <div class="c"><h3>진출 의사결정 5단계 <span class="tag">★ 빈출</span></h3>
+    <div class="detail">
+    <ol>
+      <li><b>갈까?(Why)</b> — FDI 동기</li>
+      <li><b>갈 수 있나?(Can)</b> — LOF·outsidership 극복</li>
+      <li><b>어디로?</b> — STP + 3C(소비자·경쟁자·자사) + 1C(맥락=CAGE)</li>
+      <li><b>언제?</b> — 선발 vs 후발</li>
+      <li><b>어떻게?</b> — 진입모드(commitment)</li>
+    </ol>
+    <div class="ex"><b>선발 vs 후발:</b> 선발=선점 강점이나 <b>개척비용</b> 부담 / 후발=벤치마킹 강점이나 진입장벽 극복 필요.</div>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Should/Can we go · STP·3C+1C · 1st vs late mover · Entry mode(commitment)</div>
+  </div>
+
+  <div class="c"><h3>FDI 전략적 동기 4종 <span class="tag">★ 빈출</span></h3>
+    <div class="detail">
+    <p>앞 셋은 가진 걸 써먹는 <b>활용</b>, 마지막은 새로 배우는 <b>탐색</b>.</p>
+    </div>
+    <div class="tablewrap"><table>
+      <tr><th>동기</th><th>뜻</th><th>유형</th></tr>
+      <tr><td><b>Market-seeking</b></td><td>현지 시장(수요)</td><td>활용</td></tr>
+      <tr><td><b>Resource-seeking</b></td><td>원자재·노동 자원</td><td>활용</td></tr>
+      <tr><td><b>Efficiency-seeking</b></td><td>비용 효율</td><td>활용</td></tr>
+      <tr><td><b>Strategic-asset-seeking</b></td><td>기술·지식 학습</td><td><b>탐색</b></td></tr>
+    </table></div>
+    <div class="key"><b>💡 키워드:</b> Market/Resource/Efficiency/Strategic-asset seeking · Exploitation vs Exploration</div>
+  </div>
+
+  <div class="c"><h3>진출 3대 수단</h3>
+    <div class="detail">
+    <ul>
+      <li><b>① 수출:</b> 쉬움·규모경제, 단점=통제 약함</li>
+      <li><b>② 계약(라이선싱·프랜차이즈):</b> 저위험, <b>지식이 넘어가 미래 경쟁자</b> 양성</li>
+      <li><b>③ 지분투자(IJV·M&A·그린필드):</b> 몰입·통제 최대, 위험·비용도 최대</li>
+    </ul>
+    </div>
+    <div class="key"><b>💡 키워드:</b> 수출 · 계약 · 지분투자 · commitment-control 트레이드오프</div>
+  </div>
+
+  <div class="c"><h3>Co-opetition — 경쟁자와 협력 <span class="tag">★ 빈출</span></h3>
+    <div class="detail">
+    <p><b>Cooperation + Competition.</b> 경쟁사와도 손잡기. 핵심: <b>"협력 안 하면 산업 동학이 어떻게 변할지부터 분석하라."</b> 단 <b>현재 우위를 잃지 않으면서</b> 협력.</p>
+    <div class="why">위험: <b>독점지식 유출</b>, 두 회사 위계 충돌(<b>mutual hostage</b>).</div>
+    <div class="ex"><b>C&D(Connect & Develop):</b> P&G 개방형 혁신 — 혁신의 35%+를 외부에서. 내부 R&D + 외부 연결 역량.</div>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Co-opetition · Connect & Develop · Proprietary knowledge 보호 · Dual hierarchy(mutual hostage)</div>
+  </div>
+
+  <!-- WK5 -->
+  <div class="wk" id="w5">WK5 — 국경 간 M&A <small>★ 출제 1순위</small></div>
+
+  <div class="c"><h3>M&A 핵심 이슈</h3>
+    <div class="detail">
+    <p>흔한 명분=<b>시너지</b>. 그 외 <b>실사·가치평가·PMI·산업 구조조정</b>. 자주 놓치는 게 <b>타이밍</b>(경기 사이클이 가격·실적 좌우). 실패 단골: <b>너무 비싸게·잘못된 이유·잘못된 상대·잘못된 시점</b>.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Synergy · Due diligence · Valuation·Pricing · PMI · Timing</div>
+  </div>
+
+  <div class="c"><h3>무엇을 사는가: LBM vs RBM <span class="tag">★ 핵심</span></h3>
+    <div class="detail">
+    <p>인수 <b>목적</b>이 통합 방식을 결정.</p>
+    <ul>
+      <li><b>LBM(활용):</b> 내 사업모델 <b>강화</b>하려 인수 → 흡수·통합</li>
+      <li><b>RBM(탐색):</b> <b>새 사업모델 학습</b>하려 인수 → 독립성 유지·파트너링</li>
+    </ul>
+    <div class="why"><b>핵심: 인수 목적이 통합 방식을 결정한다.</b></div>
+    </div>
+    <div class="key"><b>💡 키워드:</b> LBM(활용) vs RBM(탐색)</div>
+  </div>
+
+  <div class="c"><h3>PMI 통합 방식 2종</h3>
+    <div class="tablewrap"><table>
+      <tr><th></th><th>Conventional</th><th>Partnering</th></tr>
+      <tr><td>비유</td><td>아빠(Dad)</td><td>학생(Student)</td></tr>
+      <tr><td>목표</td><td>활용=LBM</td><td>탐색=RBM</td></tr>
+      <tr><td>함정</td><td>약탈자화, 정체성 강요</td><td>통제력 상실, 인재이탈</td></tr>
+    </table></div>
+    <div class="detail">
+    <p>LBM→Conventional(강한 통합), RBM→Partnering(자율 보장). <b>PMI는 인수 전(pre-merger)부터</b> 준비.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Conventional vs Partnering · pre-merger integration</div>
+  </div>
+
+  <div class="c"><h3>문화적응 모델 (Acculturation)</h3>
+    <div class="detail">
+    <p>인수문화(A)·피인수문화(B)·제3문화(C) 조합:</p>
+    <ul>
+      <li><b>Integration = A+B:</b> 양쪽 유지·결합</li>
+      <li><b>Assimilation = A:</b> 피인수가 인수문화에 흡수</li>
+      <li><b>Separation = B:</b> 피인수 문화 유지(분리)</li>
+      <li><b>Deculturation = C:</b> 둘 다 버리고 새 문화</li>
+    </ul>
+    <div class="why">결정요인: ① 피인수의 자기문화 보존 욕구 ② 인수기업 매력도.</div>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Integration(A+B)·Assimilation(A)·Separation(B)·Deculturation(C)</div>
+  </div>
+
+  <div class="c"><h3>M&A의 인간적 측면 — 6이론 <span class="tag">★ 서술형 단골</span></h3>
+    <div class="detail">
+    <p>피인수 직원은 정체성 상실·이직충동·스트레스. <b>"절대 business as usual이라 말하지 말고"</b> 소통·정보공유.</p>
+    <ul>
+      <li><b>불안:</b> 불확실성→불안, 정보·지원으로 완화</li>
+      <li><b>사회정체성:</b> 소속 정체성 훼손, 내·외집단 편가르기</li>
+      <li><b>문화적응:</b> 위 4유형</li>
+      <li><b>역할갈등:</b> 역할 모호 → 기대 불명확</li>
+      <li><b>직무특성:</b> 다양성·자율성·피드백 흔들림</li>
+      <li><b>조직공정성:</b> 분배·절차·상호작용 공정성</li>
+    </ul>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Anxiety·Social identity·Acculturation·Role conflict·Job characteristics·Organizational justice</div>
+  </div>
+
+  <div class="c"><h3>왜 한국기업은 PMI가 어려운가</h3>
+    <div class="detail">
+    <p>한국은 비교적 <b>단일문화</b> 사회 → 이질적 외국 조직·국가문화 통합 자신감이 낮아 국경간 M&A에 소극적이었음. 최근 적극화. 성장법은 한 번에 큰 인수 대신 <b>역량계단</b>으로 단계 학습.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Unicultural(단일문화) · Competence stairway(역량계단)</div>
+  </div>
+
+  <!-- WK6 -->
+  <div class="wk" id="w6">WK6 — 글로벌 전략 설계 <small>★★ 핵심단원</small></div>
+
+  <div class="c"><h3>큰 질문 + 본원적 전략</h3>
+    <div class="detail">
+    <p>흩어진 자회사·공장을 어떻게 <b>조정·통제</b>할 것인가가 이 단원 질문. 출발점은 Porter <b>본원적 전략</b>: <b>차별화</b>(더 비싸게) 또는 <b>원가우위</b>(더 싸게) 중 하나에 운영을 맞춤.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Coordinate & control · Differentiation vs Cost leadership</div>
+  </div>
+
+  <div class="c"><h3>글로벌이 되면 얻는 편익</h3>
+    <div class="detail">
+    <ul>
+      <li><b>시장확장:</b> 국내 제품을 해외로</li>
+      <li><b>입지경제:</b> 각 활동을 <b>가장 잘하는 곳</b>에 배치 → <b>global web</b></li>
+      <li><b>경험효과:</b> 많이 만들수록 단가↓(경험곡선·학습효과)</li>
+      <li><b>자회사 역량 활용:</b> 좋은 역량은 어느 자회사에서든 생김</li>
+    </ul>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Location economies · Experience effects · Global web · Leveraging subsidiary skills</div>
+  </div>
+
+  <div class="c"><h3>S-C-P 패러다임 (상황적합)</h3>
+    <div class="detail">
+    <p><b>Structure→Conduct→Performance.</b> 산업 구조에 전략·조직구조를 <b>정합(alignment)</b>시켜야 성과. 정답이 따로 없고 <b>상황에 맞춰야</b> 한다는 contingency 사고.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> S-C-P · Contingency · Alignment(정합)</div>
+  </div>
+
+  <div class="c"><h3>GI-LR 프레임워크 — 두 압력 <span class="tag">★★</span></h3>
+    <div class="detail">
+    <ul>
+      <li><b>글로벌 통합(GI)=원가절감 압력:</b> 전 세계 똑같이 만들어 규모경제. <b>보편적 욕구</b>·범용재, 저원가 경쟁자, 과잉설비, 강한 구매자일 때↑</li>
+      <li><b>현지 반응성(LR) 압력:</b> 나라마다 맞춤. 취향 차이, 인프라·관행, 유통채널, <b>현지정부 요구</b>일 때↑</li>
+    </ul>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Global Integration(원가절감) vs Local Responsiveness · Host government demands</div>
+  </div>
+
+  <div class="c"><h3>4대 글로벌 전략 <span class="tag">★★★ 최빈출</span></h3>
+    <div class="tablewrap"><table>
+      <tr><th></th><th>현지반응 낮음</th><th>현지반응 높음</th></tr>
+      <tr><th>통합 높음</th>
+        <td><b>Global standardization</b><br>표준화·저원가</td>
+        <td><b>Transnational</b><br>저원가+현지화, 양방향 지식</td></tr>
+      <tr><th>통합 낮음</th>
+        <td><b>International</b><br>국내제품 최소변형 수출</td>
+        <td><b>Localization/Multidomestic</b><br>나라별 현지화</td></tr>
+    </table></div>
+    <div class="detail">
+    <ul>
+      <li><b>Global standardization:</b> 원가↑·현지화↓ (반도체·표준 부품)</li>
+      <li><b>Localization:</b> 원가↓·현지화↑ (식품·미디어)</li>
+      <li><b>Transnational:</b> 둘 다↑ — 어렵지만 이상적, 자회사끼리 양방향 지식</li>
+      <li><b>International:</b> 둘 다↓ — <b>장기 부적합</b> → Global/Transnational로 이동</li>
+    </ul>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Global standardization · Localization/Multidomestic · Transnational · International</div>
+  </div>
+
+  <div class="c"><h3>Intermarket segment</h3>
+    <div class="detail">
+    <p>"한 나라의 소비자 집단은 <b>전 세계에 비슷한 사촌(close cousins)</b>이 있다" — 기술이 수요를 동질화. 유사 세그먼트를 묶어 규모경제. 글로벌 마케팅은 4P가 아니라 <b>STP</b>, <b>global product</b> 표준화 가능 여부가 관건.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Intermarket segment · Close cousins · STP · Global product</div>
+  </div>
+
+  <div class="c"><h3>역혁신 · 초국적 접근</h3>
+    <div class="detail">
+    <p><b>역혁신:</b> 신흥시장(EM)에서 개발한 제품을 거꾸로 글로벌로 확산. "glocalization은 끝", "역혁신은 <b>산소</b>". <b>초국적:</b> 통합·현지화의 긴장을 끌어안고 지식이 본사↔자회사 <b>양방향</b>으로 흐름.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Reverse innovation(oxygen) · Tension-embracing = Transnational</div>
+  </div>
+
+  <div class="c"><h3>다극화(Multipolar) 관점</h3>
+    <div class="detail">
+    <p>"선진국 vs 신흥국"의 단순 구도가 끝나고 여러 블록으로 분화:</p>
+    <ul>
+      <li><b>선진 자본주의</b>(G7+유럽+호주+한국+싱가포르) — GDP 약 62%</li>
+      <li><b>중·러 블록</b> — 약 22%</li>
+      <li><b>Global South</b> — 약 16%</li>
+    </ul>
+    <div class="why">블록별 전략 필요, 핵심 역량=<b>회복탄력성·지속가능성</b>, 추가 과제 <b>ESG·DEI</b>.</div>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Multipolar · Global South · Resilience·Sustainability · ESG·DEI</div>
+  </div>
+
+  <!-- WK7 -->
+  <div class="wk" id="w7">WK7 — 글로벌 조직구조 설계</div>
+
+  <div class="c"><h3>국제구조 단계모델</h3>
+    <div class="detail">
+    <p>해외 비중이 커질수록 구조가 단계적으로 진화. 두 축=<b>해외 제품 다양성 × 해외 매출 비중</b>.</p>
+    <ul>
+      <li>출발: <b>국제사업부</b></li>
+      <li>제품 다양성↑ → <b>세계제품사업부</b></li>
+      <li>해외 매출↑ → <b>지역사업부</b></li>
+      <li>둘 다↑ → <b>글로벌 매트릭스(Grid)</b></li>
+    </ul>
+    <div class="why">전략·상황에 구조가 따라가는 <b>상황적합</b>.</div>
+    </div>
+    <div class="key"><b>💡 키워드:</b> 단계모델 · International division → (Worldwide product / Area division) → Global matrix</div>
+  </div>
+
+  <div class="c"><h3>틀 안의 자유 · Guidance system</h3>
+    <div class="detail">
+    <p>거대 조직의 민첩성 비결 = <b>공유 가치·원칙·플랫폼</b>이라는 나침반. 규칙이 자유를 죽이는 게 아니라, 잘 설계된 <b>틀 안의 자유</b>는 방향감을 줘 자율 결정을 도움. <b>목적(purpose)</b>이 더해지면 강해짐.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Guidance system · Freedom within a framework · Purpose-driven</div>
+  </div>
+
+  <div class="c"><h3>신흥시장의 격상</h3>
+    <div class="detail">
+    <p>과거 '세계의 공장·원자재 공급처' → 이제 <b>거대 시장이자 혁신·인재의 중심(center of excellence)</b>. 지적 리더십이 아시아로 이동.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> EM = center of excellence · 지적 리더십 아시아 이동</div>
+  </div>
+
+  <div class="c"><h3>중국 디커플링 — 외국기업 4대 전략 <span class="tag">★★ 빈출</span></h3>
+    <div class="detail">
+    <p>중국은 국산화·시장점유 목표(<b>MIC 2025·China Standards 2035</b>)로 자국기업이 시장 지배. 외국기업은 <b>두 축</b>(상류·하류 활동 초점)에 따라 4 포지션:</p>
+    </div>
+    <div class="tablewrap"><table>
+      <tr><th></th><th>하류 낮음</th><th>하류 높음</th></tr>
+      <tr><th>상류 높음</th>
+        <td><b>Upstream players</b><br>대체 생산기지(China+1)</td>
+        <td><b>Dual players</b><br>디커플링+중국사업 강화 동시</td></tr>
+      <tr><th>상류 낮음</th>
+        <td><b>Below-the-radar</b><br>타깃분야면 헤지, 아니면 경계</td>
+        <td><b>Market players</b><br>"in China for China"</td></tr>
+    </table></div>
+    <div class="key"><b>💡 키워드:</b> Upstream · Dual · Below-the-radar · Market players · China+1 · MIC 2025</div>
+  </div>
+
+  <div class="c"><h3>마무리 — 탈세계화 시대의 조직</h3>
+    <div class="detail">
+    <p>러-우 전쟁, 중동 분쟁, 미·중 패권경쟁으로 <b>탈세계화</b> 진행. 본사-자회사 간 거리·시간·문화·제도·언어 격차(contextual gap)를 넘어, 지정학에 민감한 <b>회복탄력적</b> 글로벌 네트워크 설계가 과제.</p>
+    </div>
+    <div class="key"><b>💡 키워드:</b> Deglobalization · HQ-subsidiary contextual gap · Geopolitics</div>
+  </div>
+</section>
+
+<!-- ============ MOCK VIEW ============ -->
+<section class="view" id="mock">
+  <div class="intro">
+    <b>제시 기사:</b> "벤츠, 美 판매 중단 위기… 美의회, 中자본 완성차 금지법 발의"<br>
+    · 적대국(중·러·북) <b>지분 15%+</b> 완성차 → 미 생산·판매 금지 · 中자본 20%+ 벤츠도 대상 · <b>5년+ 美 현지생산 시 예외</b><br>
+    <span class="hint" style="margin:6px 0 0;display:block;">키워드 모드에선 답안이 가려집니다 — 스스로 키워드를 떠올려 보세요.</span>
+  </div>
+
+  <div class="qbox"><div class="q">Q1. 이 사건이 보여주는 세계화의 변화는?</div>
+    <div class="ans">세계화가 <b>국제자유주의→지정학</b>으로 이동. <span class="kw">choke points</span>대로 시장 접근권을 <span class="kw">weaponized interdependence</span>한 사례이며, 효율보다 안보의 <span class="kw">national security economy / de-risking</span> 국면. <span class="kw">non-market</span> 요인 전면화.</div>
+    <div class="need"><b>✅ 키워드:</b> 자유주의→지정학 · choke points · weaponized interdependence · national security economy · de-risking</div>
+  </div>
+
+  <div class="qbox"><div class="q">Q2. 벤츠의 도전을 거리·LOF로 분석하라.</div>
+    <div class="ans"><span class="kw">CAGE distance</span> 중 <span class="kw">Administrative distance</span>를 인위적으로 키움(지분구조로 접근 차단). <span class="kw">LOF</span> 급증, 특히 정치적 LOF. 극복=<span class="kw">firm-specific advantage</span> + 현지 네트워크 편입.</div>
+    <div class="need"><b>✅ 키워드:</b> CAGE(Administrative) · LOF · firm-specific advantage</div>
+  </div>
+
+  <div class="qbox"><div class="q">Q3. 외국기업의 대응전략은?</div>
+    <div class="ans"><span class="kw">디커플링 4전략</span> 중 미국 의존 높은 벤츠는 <span class="kw">Dual player</span>처럼 <b>디커플링+현지화 동시</b>. "5년 현지생산 예외"가 <span class="kw">China+1</span> 근거. <span class="kw">de-risking</span>으로 <span class="kw">로컬 공급망</span> 재편.</div>
+    <div class="need"><b>✅ 키워드:</b> 디커플링 4전략(Dual/Market) · China+1 · local supply chain · de-risking</div>
+  </div>
+
+  <div class="qbox"><div class="q">Q4. GI-LR로 자동차산업 전략을 논하라.</div>
+    <div class="ans"><span class="kw">GI-LR</span>에서 자동차는 규모경제로 <span class="kw">글로벌통합(원가절감)</span> 압력↑, 그러나 이 법안 같은 <span class="kw">host government demands</span>는 <span class="kw">현지반응성</span> 압력. 순수 <span class="kw">global standardization</span> 어려움 → <span class="kw">Transnational</span>로 이동.</div>
+    <div class="need"><b>✅ 키워드:</b> GI-LR · host government demands→local responsiveness · global standardization · Transnational</div>
+  </div>
+
+  <div class="qbox"><div class="q">Q5. 국가자본주의·기업외교 관점은?</div>
+    <div class="ans"><span class="kw">guarded globalization</span>·<span class="kw">state capitalism</span>처럼 정부가 안보 위해 시장 통제. 기업은 <span class="kw">corporate foreign policy</span>·<span class="kw">geopolitical due diligence</span>를 핵심에. <span class="kw">non-market strategy</span>가 생존 좌우.</div>
+    <div class="need"><b>✅ 키워드:</b> guarded globalization · state capitalism · corporate foreign policy · geopolitical due diligence · non-market</div>
+  </div>
+
+  <div class="qbox"><div class="q">Q6. MNE의 마인드셋·운영 원칙은?</div>
+    <div class="ans"><span class="kw">multipolar</span> 관점에서 선진국·중러·<span class="kw">Global South</span> 블록별 전략. <span class="kw">resilience·sustainability</span> 마인드셋. <span class="kw">S-C-P</span> 정합(alignment). <span class="kw">로컬 공급망</span>·<span class="kw">ESG·DEI</span>.</div>
+    <div class="need"><b>✅ 키워드:</b> multipolar · Global South · resilience·sustainability · S-C-P alignment · local supply chain · ESG·DEI</div>
+  </div>
+
+  <div class="c"><h3>🎯 이 기사 하나로 커버되는 단원</h3>
+    <p>WK2(세계화·choke points·CAGE·LOF) · WK6(GI-LR·다극화) · WK7(디커플링 4전략) 전부 연결. <b>지정학 기사 1건 = 4~5개 프레임 동시 적용.</b> 연결고리(choke points→CAGE/LOF→4전략→GI-LR→다극화)를 통째로 외울 것.</p>
+    <h3 style="margin-top:12px;">✍️ 셀프 훈련</h3>
+    <ul style="padding-left:20px;">
+      <li>키워드 모드로 전환 → 기사만 보고 키워드 나열</li>
+      <li>다른 기사(반도체 통제 / AI동맹 / 신흥국 인수)로 같은 틀 재적용</li>
+      <li>한 문항당 키워드 3~4개 안 떠오르면 그 단원 재암기</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ CRAM VIEW ============ -->
+<section class="view" id="cram">
+  <div class="intro"><b>시험 직전 30분 — 입에 붙일 것만.</b></div>
+  <div class="cramcard">
+    <h3>큰 그림</h3><p><span class="kw">Int'l liberalism→Geopolitics</span> · <span class="kw">Globalization→Guarded→Decoupling/De-risking</span></p>
+    <h3>거리/이방인</h3><p><span class="kw">CAGE</span> · <span class="kw">LOF</span> · <span class="kw">Firm-specific advantage</span> · <span class="kw">VRIN</span></p>
+    <h3>이론</h3><p><span class="kw">Internalization(TCE)</span> · <span class="kw">KBV(tacit)</span> · <span class="kw">OLI</span> · <span class="kw">Outsidership</span> · <span class="kw">Dynamic capability</span></p>
+    <h3>FDI 동기</h3><p><span class="kw">Market·Resource·Efficiency·Strategic-asset seeking</span></p>
+    <h3>진입</h3><p><span class="kw">수출·계약·지분투자</span> · <span class="kw">Co-opetition</span> · <span class="kw">C&D</span></p>
+    <h3>M&A</h3><p><span class="kw">Synergy·PMI·Timing</span> · <span class="kw">LBM vs RBM</span> · <span class="kw">Conventional vs Partnering</span> · <span class="kw">Acculturation 4유형</span> · <span class="kw">인간측면 6이론</span> · <span class="kw">Competence stairway</span></p>
+    <h3>글로벌전략</h3><p><span class="kw">Porter generic</span> · <span class="kw">Value chain</span> · <span class="kw">Location economies·Experience effects</span> · <span class="kw">S-C-P</span> · <span class="kw">GI-LR 4전략</span> · <span class="kw">Intermarket segment</span></p>
+    <h3>조직</h3><p><span class="kw">단계모델</span> · <span class="kw">Freedom within a framework</span> · <span class="kw">Guidance system</span> · <span class="kw">Purpose</span></p>
+    <h3>지정학</h3><p><span class="kw">Choke points</span> · <span class="kw">MIC 2025</span> · <span class="kw">4전략(Upstream·Dual·Below-radar·Market)</span> · <span class="kw">Multipolar/Global South</span></p>
+    <h3>진출이론</h3><p><span class="kw">FDI vs FPI(10%)</span> · <span class="kw">OLI↔LLL</span> · <span class="kw">Reverse innovation</span></p>
+  </div>
+</section>
+
+</main>
+<button class="totop" id="totop" aria-label="맨 위로">↑</button>
+<script>
+  // mode toggle (해설 / 키워드)
+  var seg=document.getElementById('seg');
+  seg.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){
+      seg.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      document.body.classList.toggle('kwmode', b.dataset.mode==='kw');
+    });
+  });
+  // view switching + week jump
+  var views=document.querySelectorAll('.view');
+  var navV=document.querySelectorAll('.nav-v');
+  var navW=document.querySelectorAll('.nav-w');
+  function showView(id){
+    views.forEach(function(v){v.classList.toggle('active', v.id===id);});
+  }
+  navV.forEach(function(b){
+    b.addEventListener('click',function(){
+      navW.forEach(function(x){x.classList.remove('active');});
+      navV.forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      showView(b.dataset.view);
+      window.scrollTo({top:0});
+    });
+  });
+  navW.forEach(function(b){
+    b.addEventListener('click',function(){
+      navV.forEach(function(x){x.classList.remove('active');});
+      navW.forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      showView('concepts');
+      var el=document.getElementById(b.dataset.week);
+      if(el){setTimeout(function(){el.scrollIntoView({behavior:'smooth'});},30);}
+    });
+  });
+  // to top
+  var totop=document.getElementById('totop');
+  window.addEventListener('scroll',function(){
+    if(window.scrollY>400){totop.classList.add('show');}else{totop.classList.remove('show');}
+  });
+  totop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>
